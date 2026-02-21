@@ -1,0 +1,124 @@
+import streamlit as st
+import info
+import pandas as pd
+
+#About Me
+def about_me_section():
+    st.header("♾️About Me")
+    st.image(info.profile_picture, width = 200)
+    st.write(info.about_me)
+    st.write('---')
+about_me_section()
+
+#Sidebar Links
+def links_section():
+    st.sidebar.header("Links")
+    st.sidebar.text("Connect with me on LinkedIn")
+    # Use real <a>/<img> tags (no HTML entities)
+    linkedin_link= f'{info.my_linkedin_url}{info.linkedin_image_url}</a>'
+    st.sidebar.markdown(linkedin_link, unsafe_allow_html=True)
+
+    st.sidebar.text("Checkout my work")
+    github_link = f'{info.my_github_url}{info.github_image_url}</a>'
+    st.sidebar.markdown(github_link, unsafe_allow_html=True)
+
+    st.sidebar.text("Or email me!")
+    email_html = f'mailto:{info.my_email_address}{info.email_image_url}</a>'
+    st.sidebar.markdown(email_html, unsafe_allow_html=True)
+links_section()
+
+#Education
+def education_section(education_data, course_data):
+    st.header("📚Education")
+    st.subheader(f"**{education_data['Institution']}**")
+    st.write(f"**Degree:** {education_data['Degree']}")
+    st.write(f"**Graduation Date:** {education_data['Graduation Date']}")
+    st.write(f"**GPA:** {education_data['GPA']}")
+    st.write("**Relevant Coursework:**")
+    coursework = pd.DataFrame(course_data)
+    st.dataframe(coursework, column_config={
+        "code": "Course Code",
+        "names": "Course Names",
+        "semester_taken": "Semester Taken",
+        "skills": "What I Learned"},
+        hide_index=True,
+        )
+    st.write("---")
+
+education_section(info.education_data, info.course_data)
+
+#Professional Experience
+def experience_section(experience_data):
+    st.header("💼Professional Experience")
+    for job_title, (job_description, image) in experience_data.items():
+        expander = st.expander(f"{job_title}")
+        expander.image(image, width=250)
+        for bullet in job_description:
+            expander.write(bullet)
+    st.write("---")
+experience_section(info.experience_data)
+
+#Projects
+def project_section(projects_data):
+    st.header("🔮Projects")
+    st.markdown("""
+### Buzzfeed-Style Quiz: "Which Jujutsu Kaisen Character Are You?"
+A multi-page Streamlit application that determines which *Jujutsu Kaisen* character best matches the user's personality. It features custom-designed questions using widgets like radio buttons, multiselect, and number input, and displays a different character result with an image based on the user's answers. The quiz uses the `st.selectbox`, `st.slider`, and `st.balloons()` functions.
+""")
+    for project_name, (project_description_list, image) in projects_data.items():
+        expander = st.expander(f"{project_name}")
+        expander.image(image, width=250)
+        project_description_text = project_description_list[0]
+        expander.write(project_description_text)
+    st.write("---")
+project_section(info.projects_data)
+
+#Skills
+def skills_section(programming_data, spoken_data):
+    st.header("Skills")
+    st.subheader("💪Strengths")
+    for skill, percentage in programming_data.items():
+        st.write(f"{skill}{info.programming_icons.get(skill,)}")
+        st.progress(percentage)
+    st.subheader("🗣Spoken Languages")
+    for spoken, proficiency in spoken_data.items():
+        st.write(f"{spoken}{info.spoken_icons.get(spoken,)}: {proficiency}")
+
+    st.write("---")
+skills_section(info.programming_data, info.spoken_data)
+
+#Activities
+def activities_section(leadership_data, activity_data):
+    st.header("🎮Activities")
+    tab1,tab2 = st.tabs(["Leadership", "Club"])
+    with tab1:
+        st.subheader("🥇Leadership")
+        for title, (details, image) in leadership_data.items():
+            expander = st.expander(f"{title}")
+            expander.image(image, width=250)
+            for bullet in details:
+                expander.write(bullet)
+    with tab2:
+        st.subheader("🥊Club")
+        for title, (details,image) in activity_data.items():
+            expander = st.expander(f"{title}")
+            expander.image(image, width=250)
+            for bullet in details:
+                expander.write(bullet)
+    st.write("---")
+
+activities_section(info.leadership_data, info.activity_data)
+
+#Contact (small visible section to satisfy rubric)
+def contact_section():
+    st.header("📬 Contact")
+    col1, col2, col3 = st.columns(3)
+    with col1:
+        st.markdown(f"{info.my_linkedin_url}")
+    with col2:
+        st.markdown(f"{info.my_github_url}")
+    with col3:
+        st.markdown(f"{info.my_email_address}")
+    st.write("---")
+
+contact_section()
