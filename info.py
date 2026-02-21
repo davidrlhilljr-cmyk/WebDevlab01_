@@ -94,7 +94,7 @@ leadership_data = {
         [
             "- Used my position to champion a progressive agenda, embracing anyone with potential regardless of their background. "
         ],
-        "Images/ceremonial.jpg"  # was .webp
+        "Images/ceremonial.jpeg"  # was .webp
     ),
     "Mentor and Trainer at Jujutsu High": (
         [
